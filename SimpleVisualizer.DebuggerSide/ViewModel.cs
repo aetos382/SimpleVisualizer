@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,19 +25,26 @@ public partial class ViewModel
     public async Task Loaded(
         CancellationToken cancellationToken)
     {
-        CustomObject target;
-
-        if (this.UseAsyncProvider)
+        try
         {
-            var asyncProvider = (IAsyncVisualizerObjectProvider)this.ObjectProvider;
-            var obj = await asyncProvider.GetDeserializableObjectAsync(cancellationToken);
-            target = obj.ToObject<CustomObject>();
-        }
-        else
-        {
-            target = (CustomObject)this.ObjectProvider.GetObject();
-        }
+            CustomObject target;
 
-        this.Message = target.Message;
+            if (this.UseAsyncProvider)
+            {
+                var asyncProvider = (IAsyncVisualizerObjectProvider)this.ObjectProvider;
+                var obj = await asyncProvider.GetDeserializableObjectAsync(cancellationToken);
+                target = obj.ToObject<CustomObject>();
+            }
+            else
+            {
+                target = (CustomObject)this.ObjectProvider.GetObject();
+            }
+
+            this.Message = target.Message;
+        }
+        catch (Exception e)
+        {
+            this.Message = e.ToString();
+        }
     }
 }

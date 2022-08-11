@@ -13,7 +13,7 @@ public class Visualizer :
         {
             DataContext = new ViewModel
             {
-                UseAsyncProvider = false,
+                UseAsyncProvider = true,
                 ObjectProvider = objectProvider
             }
         };
